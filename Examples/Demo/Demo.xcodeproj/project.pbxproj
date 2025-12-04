@@ -29,6 +29,7 @@
 		99DE2A3D294F256A0025E332 /* HeadingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DE2A3C294F256A0025E332 /* HeadingsView.swift */; };
 		99DE2A3F294F33030025E332 /* ListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DE2A3E294F33030025E332 /* ListsView.swift */; };
 		99DE2A41294F8ED70025E332 /* TextStylesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DE2A40294F8ED70025E332 /* TextStylesView.swift */; };
+		AFEB093B2EE1864400B4C75D /* HTMLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFEB093A2EE1863900B4C75D /* HTMLView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		99DE2A3C294F256A0025E332 /* HeadingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingsView.swift; sourceTree = "<group>"; };
 		99DE2A3E294F33030025E332 /* ListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsView.swift; sourceTree = "<group>"; };
 		99DE2A40294F8ED70025E332 /* TextStylesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStylesView.swift; sourceTree = "<group>"; };
+		AFEB093A2EE1863900B4C75D /* HTMLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 			children = (
 				99B59C9C2954909000390E9B /* SyntaxHighlighter */,
 				99DE2A20294D9A2B0025E332 /* ContentView.swift */,
+				AFEB093A2EE1863900B4C75D /* HTMLView.swift */,
 				991E39872950A80C00A3012A /* CodeView.swift */,
 				99B59CA129549AB600390E9B /* CodeSyntaxHighlightView.swift */,
 				99DE2A1E294D9A2B0025E332 /* DemoApp.swift */,
@@ -230,6 +233,7 @@
 				99DE2A1F294D9A2B0025E332 /* DemoApp.swift in Sources */,
 				99DE2A39294E1B700025E332 /* RepositoryReadmeView.swift in Sources */,
 				9902F2B229571D5D003A2DCC /* ImagesView.swift in Sources */,
+				AFEB093B2EE1864400B4C75D /* HTMLView.swift in Sources */,
 				9902F2B729575183003A2DCC /* ImageProvidersView.swift in Sources */,
 				99939E2D298EC9B500E3337E /* LazyLoadingView.swift in Sources */,
 			);
@@ -360,6 +364,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Demo/Preview Content\"";
+				DEVELOPMENT_TEAM = F3HFLBF5AT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -373,7 +378,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gonzalezreal.Demo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Jeffrey.swifmarkdownuiDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -389,6 +394,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Demo/Preview Content\"";
+				DEVELOPMENT_TEAM = F3HFLBF5AT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -402,7 +408,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gonzalezreal.Demo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Jeffrey.swifmarkdownuiDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

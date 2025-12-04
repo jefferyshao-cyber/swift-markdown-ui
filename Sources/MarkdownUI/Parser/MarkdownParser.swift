@@ -60,7 +60,8 @@ extension BlockNode {
     case .codeBlock:
       self = .codeBlock(fenceInfo: unsafeNode.fenceInfo, content: unsafeNode.literal ?? "")
     case .htmlBlock:
-      self = .htmlBlock(content: unsafeNode.literal ?? "")
+      let content = unsafeNode.literal ?? ""
+      self = .htmlBlock(tag: HTMLTag(content), content: content)
     case .paragraph:
       self = .paragraph(content: unsafeNode.children.compactMap(InlineNode.init(unsafeNode:)))
     case .heading:
@@ -303,7 +304,7 @@ extension UnsafeNode {
       }
       cmark_node_set_literal(node, content)
       return node
-    case .htmlBlock(let content):
+    case .htmlBlock(_, let content):
       guard let node = cmark_node_new(CMARK_NODE_HTML_BLOCK) else { return nil }
       cmark_node_set_literal(node, content)
       return node

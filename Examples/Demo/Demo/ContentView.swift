@@ -12,6 +12,13 @@ struct ContentView: View {
           } label: {
             Label("Headings", systemImage: "textformat.size")
           }
+            NavigationLink {
+                HTMLView()
+                    .navigationTitle("HTML")
+                    .navigationBarTitleDisplayMode(.inline)
+            } label: {
+                Label("HTML", systemImage: "textformat.size")
+            }
           NavigationLink {
             ListsView()
               .navigationTitle("Lists")
