@@ -13,7 +13,7 @@ extension HTMLTag {
     )
   }
 
-  init?(_ description: String) {
+  public init?(_ description: String) {
     guard
       let match = Constants.tagExpression.firstMatch(
         in: description,
