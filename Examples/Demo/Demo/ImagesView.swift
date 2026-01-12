@@ -11,6 +11,24 @@ struct ImagesView: View {
     ```
 
     ![This is an image](https://picsum.photos/id/91/400/300)
+    
+    
+    ### 1. Transaction Volume and Network Activity
+    - **Daily transactions**: 1.83 million (2026-01-12)
+    - **Active addresses**: 645,596 (24h)
+    - **New addresses**: 64,793 (24h) - **110% increase since Fusaka upgrade**
+
+    The sustained high transaction volume indicates robust network utilization, while the address growth suggests expanding user adoption post-upgrades.
+
+    ### 2. Revenue and Fee Dynamics
+    
+    ![Ethereum Daily Revenue Peaks](https://metadata.asksurf.ai/dune/8687316/5293093.png)
+    *Revenue spikes exceeding $40M demonstrate network value capture during high-activity periods*
+
+    **Revenue composition shift** is particularly telling:
+    - **MEV Tips + Priority Fees**: >80% share during high-volatility periods
+    - **Base Fees**: <20% share (down from nearly 100% pre-2025)
+    - **Blob Submissions**: Negligible but growing contribution
 
     ― Photo by Jennifer Trovato
     """

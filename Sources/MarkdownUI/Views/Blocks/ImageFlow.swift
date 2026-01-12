@@ -55,4 +55,9 @@ extension ImageFlow {
 
     self.items = items.indexed()
   }
+
+  /// Creates an ImageFlow from an array of RawImageData
+  init(images: [RawImageData]) {
+    self.items = images.map { Item.image($0) }.indexed()
+  }
 }
