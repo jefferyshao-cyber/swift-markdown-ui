@@ -187,10 +187,8 @@ private struct NSAttributedStringInlineRenderer {
       attributes[.foregroundColor] = UIColor(foregroundColor)
     }
 
-    // Extract background color if available
-    if let backgroundColor = container.backgroundColor {
-      attributes[.backgroundColor] = UIColor(backgroundColor)
-    }
+    // Note: backgroundColor is intentionally NOT applied here
+    // It interferes with UITextView's selection highlight
 
     return attributes
   }
@@ -217,9 +215,8 @@ private struct NSAttributedStringInlineRenderer {
       attributes[.foregroundColor] = UIColor(foregroundColor)
     }
 
-    if let backgroundColor = container.backgroundColor {
-      attributes[.backgroundColor] = UIColor(backgroundColor)
-    }
+    // Note: backgroundColor is intentionally NOT applied here
+    // It interferes with UITextView's selection highlight
   }
 
   private static func uiFont(from properties: FontProperties) -> UIFont {

@@ -27,6 +27,9 @@ struct SelectableTextView: UIViewRepresentable {
     textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     textView.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
+    // Set selection/tint color to #FF2882
+    textView.tintColor = UIColor(red: 1.0, green: 40.0/255.0, blue: 130.0/255.0, alpha: 1.0)
+
     // Enable data detection for links if needed
     textView.dataDetectorTypes = []
 

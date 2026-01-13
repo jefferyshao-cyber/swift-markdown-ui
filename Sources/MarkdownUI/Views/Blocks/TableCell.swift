@@ -30,7 +30,7 @@ struct TableCell: View {
     if let imageFlow = ImageFlow(self.cell.content) {
       imageFlow
     } else {
-      InlineText(self.cell.content)
+      NonSelectableInlineText(self.cell.content)
     }
   }
 }

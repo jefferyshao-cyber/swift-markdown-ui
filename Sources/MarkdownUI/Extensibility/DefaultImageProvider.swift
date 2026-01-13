@@ -134,15 +134,10 @@ struct TappableNetworkImage: View {
       }
     }
     .task(id: processedURL) {
-      await loadImage()
-    }
-    .onChange(of: colorScheme) { _ in
-      // Reload image when colorScheme changes
+      // Reset state and reload when processedURL changes (including colorScheme changes)
       loadingState = .loading
       loadedImage = nil
-      Task {
-        await loadImage()
-      }
+      await loadImage()
     }
     .fullScreenCover(isPresented: $showImageViewer) {
       if let image = loadedImage {
