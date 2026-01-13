@@ -43,6 +43,7 @@ final class ZoomableImageView: UIScrollView, UIScrollViewDelegate, UIGestureReco
 
     var onDismiss: (() -> Void)?
     var onOpacityChange: ((CGFloat) -> Void)?
+    var onZoomStateChange: ((Bool) -> Void)?
 
     /// Whether dismiss has been triggered (to prevent multiple dismiss calls)
     private var isDismissing = false
@@ -313,6 +314,10 @@ final class ZoomableImageView: UIScrollView, UIScrollViewDelegate, UIGestureReco
             bottom: verticalInset,
             right: horizontalInset
         )
+
+        // Notify zoom state change
+        let isZoomed = zoomScale > minimumZoomScale + 0.01
+        onZoomStateChange?(isZoomed)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -408,6 +413,7 @@ final class ImagePagerScrollView: UIScrollView, UIScrollViewDelegate {
     var onDismiss: (() -> Void)?
     var onOpacityChange: ((CGFloat) -> Void)?
     var onPageChange: ((Int) -> Void)?
+    var onZoomStateChange: ((Bool) -> Void)?
 
     private(set) var currentPage: Int = 0
 
@@ -464,6 +470,9 @@ final class ImagePagerScrollView: UIScrollView, UIScrollViewDelegate {
             }
             zoomableView.onOpacityChange = { [weak self] opacity in
                 self?.onOpacityChange?(opacity)
+            }
+            zoomableView.onZoomStateChange = { [weak self] isZoomed in
+                self?.onZoomStateChange?(isZoomed)
             }
             zoomableView.tag = index
             addSubview(zoomableView)
@@ -546,12 +555,14 @@ struct ImagePagerRepresentable: UIViewRepresentable {
     let onDismiss: () -> Void
     let onOpacityChange: (CGFloat) -> Void
     let onPageChange: (Int) -> Void
+    let onZoomStateChange: (Bool) -> Void
 
     func makeUIView(context: Context) -> ImagePagerScrollView {
         let pagerView = ImagePagerScrollView()
         pagerView.onDismiss = onDismiss
         pagerView.onOpacityChange = onOpacityChange
         pagerView.onPageChange = onPageChange
+        pagerView.onZoomStateChange = onZoomStateChange
         return pagerView
     }
 
@@ -582,6 +593,7 @@ public struct PreviewImagesView: View {
 
     @State private var currentImageIndex: Int
     @State private var backgroundOpacity: CGFloat = 1.0
+    @State private var isZoomed: Bool = false
 
     @Environment(\.imageViewerConfiguration) private var configuration
 
@@ -640,19 +652,31 @@ public struct PreviewImagesView: View {
                     },
                     onPageChange: { page in
                         currentImageIndex = page
+                    },
+                    onZoomStateChange: { zoomed in
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isZoomed = zoomed
+                        }
                     }
                 )
                 .ignoresSafeArea()
             }
 
-            // Page indicator
-            if imageCount > 1 {
-                VStack {
-                    Spacer()
+            // Bottom controls (page indicator + toolbar)
+            VStack {
+                Spacer()
+
+                // Page indicator
+                if imageCount > 1 {
                     pageIndicator
-                        .padding(.bottom, 50)
+                        .padding(.bottom, 16)
                 }
+
+                // Bottom toolbar
+                bottomToolbar
+                    .padding(.bottom, 50)
             }
+            .opacity(isZoomed ? 0 : 1)
         }
         .background(ClearFullScreenBackground())
         .ignoresSafeArea()
@@ -676,6 +700,64 @@ public struct PreviewImagesView: View {
         .padding(.vertical, 8)
         .background(Color.black.opacity(0.3))
         .cornerRadius(16)
+    }
+
+    private var bottomToolbar: some View {
+        HStack(spacing: 80) {
+            Button(action: saveImage) {
+                VStack(spacing: 4) {
+                    Image(systemName: "square.and.arrow.down")
+                        .font(.system(size: 22))
+                    Text("Save")
+                        .font(.system(size: 14))
+                }
+                .foregroundColor(.white)
+            }
+
+            // Share button
+            Button(action: shareImage) {
+                VStack(spacing: 4) {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 20))
+                    Text("Share")
+                        .font(.system(size: 14))
+                }
+                .foregroundColor(.white)
+            }
+        }
+        .padding(.horizontal, 40)
+        .padding(.vertical, 12)
+        .background(Color.black.opacity(0.3))
+        .cornerRadius(20)
+    }
+
+    // MARK: - Actions
+
+    private func saveImage() {
+        guard currentImageIndex >= 0, currentImageIndex < images.count else { return }
+        let image = images[currentImageIndex]
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+    }
+
+    private func shareImage() {
+        guard currentImageIndex >= 0, currentImageIndex < images.count else { return }
+        let image = images[currentImageIndex]
+
+        let activityViewController = UIActivityViewController(
+            activityItems: [image],
+            applicationActivities: nil
+        )
+
+        // Find the top-most view controller to present from
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootViewController = windowScene.windows.first?.rootViewController {
+            var topController = rootViewController
+            while let presented = topController.presentedViewController {
+                topController = presented
+            }
+            activityViewController.popoverPresentationController?.sourceView = topController.view
+            topController.present(activityViewController, animated: true)
+        }
     }
 }
 
