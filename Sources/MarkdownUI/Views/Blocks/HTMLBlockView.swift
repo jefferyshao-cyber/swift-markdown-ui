@@ -7,12 +7,11 @@ struct HTMLBlockView: View {
   let content: String
 
   var body: some View {
-//    if let custom = renderHTMLBlock(tag, content) {
-//      custom
-//    } else {
-      ParagraphView(content: content)
-            .textSelection(.enabled)
-            .disabled(true)
+    if let custom = renderHTMLBlock(tag, content) {
+      custom
+    } else {
+      // 默认不显示任何 HTML 标签
+      EmptyView()
     }
-//  }
+  }
 }
