@@ -321,6 +321,12 @@ final class ZoomableImageView: UIScrollView, UIScrollViewDelegate, UIGestureReco
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Once a dismiss is underway the opacity is owned by the dismiss path
+        // (animated to 0). Without this guard a trailing scroll callback from
+        // the settling/bouncing contentOffset re-emits a higher opacity and
+        // flashes the background bright for one frame before the cover closes.
+        guard !isDismissing else { return }
+
         // Track vertical offset for dismiss gesture (only when not zoomed)
         guard zoomScale <= minimumZoomScale + 0.01 else {
             onOpacityChange?(1.0)
@@ -417,6 +423,12 @@ final class ImagePagerScrollView: UIScrollView, UIScrollViewDelegate {
 
     private(set) var currentPage: Int = 0
 
+    /// Set in `configure`, consumed once in `layoutSubviews` after real bounds
+    /// exist. Fixes the first-open desync: on initial presentation `configure`
+    /// runs while `bounds.width == 0`, so its `contentOffset` lands on page 0
+    /// even though the page dots (SwiftUI `currentImageIndex`) show `startIndex`.
+    private var needsInitialScroll = false
+
     // MARK: - Initialization
 
     override init(frame: CGRect) {
@@ -448,12 +460,18 @@ final class ImagePagerScrollView: UIScrollView, UIScrollViewDelegate {
         self.currentPage = min(max(0, startIndex), max(0, images.count - 1))
 
         setupZoomableViews()
+        needsInitialScroll = true
         setNeedsLayout()
         layoutIfNeeded()
 
-        // Scroll to start index
-        let offsetX = CGFloat(currentPage) * bounds.width
-        setContentOffset(CGPoint(x: offsetX, y: 0), animated: false)
+        // Apply the start index now if bounds are already valid; otherwise
+        // `layoutSubviews` honors `needsInitialScroll` once they are. On first
+        // presentation bounds.width is 0 here, so this branch is skipped and
+        // layoutSubviews does the real work.
+        if bounds.width > 0 {
+            setContentOffset(CGPoint(x: CGFloat(currentPage) * bounds.width, y: 0), animated: false)
+            needsInitialScroll = false
+        }
     }
 
     private func setupZoomableViews() {
@@ -502,6 +520,14 @@ final class ImagePagerScrollView: UIScrollView, UIScrollViewDelegate {
 
         // Update content size
         contentSize = CGSize(width: pageWidth * CGFloat(zoomableViews.count), height: pageHeight)
+
+        // Honor the initial page once real bounds exist (first presentation
+        // runs `configure` with bounds.width == 0). One-shot: cleared right
+        // after so it never fights user scrolling or re-centers on rotation.
+        if needsInitialScroll {
+            setContentOffset(CGPoint(x: CGFloat(currentPage) * pageWidth, y: 0), animated: false)
+            needsInitialScroll = false
+        }
     }
 
     // MARK: - Page Navigation
